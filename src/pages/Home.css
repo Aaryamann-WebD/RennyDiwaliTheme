@@ -3,7 +3,7 @@
 #MSBillets_productBG{
     position:absolute;
     z-index:17;
-    top: 42%;
+    top: 25%;
     bottom: 0;
 }
 @media (max-width: 767px) {

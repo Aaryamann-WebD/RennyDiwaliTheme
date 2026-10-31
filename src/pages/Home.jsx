@@ -39,6 +39,9 @@ import Coil from '../assets/hr-coil.webp';
 import rods from '../assets/product-5.webp';
 import popup from '../assets/careerPopup2.webp';
 import popup_Mobile from '../assets/careerPopup2-Mobile.webp';
+import greenPopup from '../assets/green-steel-popup.webp';
+import greenPopup_Mobile from '../assets/green-steel-popup-mobile.webp';
+
 import sustainability2 from '../assets/CBAM.webm';
 
 import CountUp from 'react-countup';
@@ -107,9 +110,33 @@ const scaleFade = {
   visible: { opacity: 1, scale: 1 },
 };
 
+const POPUPS = [
+  {
+    id: 'gptw',
+    desktop: popup,
+    mobile: popup_Mobile,
+    alt: 'Renny Strips is Great Place To Work Certified',
+  },
+  {
+    id: 'green-steel',
+    desktop: greenPopup,
+    mobile: greenPopup_Mobile,
+    alt: 'Renny Strips Green Steel Certificate – 5 Star Rating',
+  },
+];
+
 const Home = () => {
   const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
+  const [popupIndex, setPopupIndex] = useState(-1); // -1 = closed
+  const activePopup = POPUPS[popupIndex];
+  // X button: go to the next popup, or close if it was the last
+  const closeCurrentPopup = () =>
+  setPopupIndex((i) => (i + 1 < POPUPS.length ? i + 1 : -1));
+  // Backdrop click: close everything
+  const closeAllPopups = () => setPopupIndex(-1);
+
+
   // --- BACKEND INTEGRATION STATES ---
   const [newsData, setNewsData] = useState([]);
   const [activeNews, setActiveNews] = useState(null);
@@ -201,29 +228,55 @@ const Home = () => {
   // Show the popup as soon as its image is decoded instead of waiting for the
   // window 'load' event. Opening it after every video/image had finished made the
   // popup the page's LCP element (~7s); preloading keeps it early and jank-free.
-  useEffect(() => {
-    const isPrerender =
-      typeof navigator !== 'undefined' && navigator.userAgent === 'ReactSnap';
-    if (isPrerender) return;
+  // useEffect(() => {
+  //   const isPrerender =
+  //     typeof navigator !== 'undefined' && navigator.userAgent === 'ReactSnap';
+  //   if (isPrerender) return;
 
-    let cancelled = false;
-    const show = () => {
-      if (!cancelled) setShowPopup(true);
-    };
+  //   let cancelled = false;
+  //   const show = () => {
+  //     if (!cancelled) setShowPopup(true);
+  //   };
+  //   const img = new Image();
+  //   img.src = window.matchMedia('(max-width: 767px)').matches
+  //     ? popup_Mobile
+  //     : popup;
+  //   if (img.decode) {
+  //     img.decode().then(show, show);
+  //   } else {
+  //     img.onload = show;
+  //     img.onerror = show;
+  //   }
+  //   return () => {
+  //     cancelled = true;
+  //   };
+  // }, []);
+
+  useEffect(() => {
+  const isPrerender =
+    typeof navigator !== 'undefined' && navigator.userAgent === 'ReactSnap';
+  if (isPrerender) return;
+
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
+  let cancelled = false;
+
+  const load = (p) => {
     const img = new Image();
-    img.src = window.matchMedia('(max-width: 767px)').matches
-      ? popup_Mobile
-      : popup;
-    if (img.decode) {
-      img.decode().then(show, show);
-    } else {
-      img.onload = show;
-      img.onerror = show;
-    }
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    img.src = isMobile ? p.mobile : p.desktop;
+    return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+  };
+
+  // Open as soon as the first image is ready
+  load(POPUPS[0]).then(() => {
+    if (!cancelled) setPopupIndex(0);
+  });
+  // Preload the rest in the background so the next popup appears instantly
+  POPUPS.slice(1).forEach(load);
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
   const formatDate = useCallback((dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -266,99 +319,64 @@ const Home = () => {
       />
 
       {/* ========== AUTOMATIC POPUP MODAL ========== */}
-      <AnimatePresence>
-        {showPopup && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            {/* Click backdrop to close */}
-            <div
-              className="absolute inset-0"
-              onClick={() => setShowPopup(false)}
-            />
+      {activePopup && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    {/* Click backdrop to close all */}
+    <div className="absolute inset-0" onClick={closeAllPopups} />
 
-            {/* Popup Container */}
-            {/* Commented out old container to preserve history:
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="relative z-10 max-w-lg w-full flex items-center justify-center"
-            >
-            */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="relative z-10 max-w-lg w-full flex items-center justify-center aspect-[3/2]"
-            >
-              {/* Close (X) Icon Button */}
-              {/* Commented out old close button to keep history:
-              <button
-                onClick={() => setShowPopup(false)}
-                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-[#292c44] hover:bg-gray-100 rounded-full transition"
-                aria-label="Close modal"
-              >
-                <MdClose className="text-2xl" />
-              </button>
-              */}
-              <button
-                onClick={() => setShowPopup(false)}
-                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-[#292c44] hover:bg-gray-100 rounded-full transition z-20"
-                aria-label="Close modal"
-              >
-                <MdClose className="text-2xl" />
-              </button>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activePopup.id}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="relative z-10 max-w-3xl w-full flex items-center justify-center aspect-[3/2]"
+      >
+        <button
+          onClick={closeCurrentPopup}
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-[#292c44] hover:bg-gray-100 rounded-full transition z-20"
+          aria-label="Close modal"
+        >
+          <MdClose className="text-2xl" />
+        </button>
 
-              {/* Popup Image Only */}
-              {/* Commented out old image to keep history:
-              <img
-                src={popup}
-                alt="Popup Announcement"
-                width={1536}
-                height={1024}
-                loading="lazy"
-                className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl"
-              />
-              */}
-              <picture className="w-full flex justify-center">
-                {/* Commented out old mobile source to keep history:
-                <source
-                  media="(max-width: 767px)"
-                  srcSet={popup}
-                  width="1536"
-                  height="1024"
-                  type="image/webp"
-                />
-                */}
-                <source
-                  media="(max-width: 767px)"
-                  srcSet={popup_Mobile}
-                  width="520"
-                  height="346"
-                  type="image/webp"
-                />
-                <source
-                  media="(min-width: 768px)"
-                  srcSet={popup}
-                  width="512"
-                  height="314"
-                  type="image/webp"
-                />
-                <img
-                  src={popup}
-                  alt="Popup Announcement"
-                  width="512"
-                  height="314"
-                  fetchpriority="high"
-                  loading="eager"
-                  className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl aspect-[3/2]"
-                />
-              </picture>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+        <picture className="w-full flex justify-center">
+          <source
+            media="(max-width: 767px)"
+            srcSet={activePopup.mobile}
+            width="665"
+            height="443"
+            type="image/webp"
+          />
+          <source
+            media="(min-width: 768px)"
+            srcSet={activePopup.desktop}
+            width="1536"
+            height="1024"
+            type="image/webp"
+          />
+          <img
+            src={activePopup.desktop}
+            alt={activePopup.alt}
+            width="1536"
+            height="1024"
+            fetchPriority="high"
+            loading="eager"
+            className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl aspect-[3/2]"
+          />
+        </picture>
+
+        {/* Page indicator, e.g. 1 / 2 */}
+        <span className="absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-gray-500 bg-white/80 rounded-full px-3 py-1 z-20">
+          {popupIndex + 1} / {POPUPS.length}
+        </span>
+      </motion.div>
+    </AnimatePresence>
+  </div>
+)}
+
+{/* How it behaves: */}
       <div className="relative flex flex-col font-helvetica ">
         {/* 1. Banner Section */}
         <HeroSection HomepageBanner={HomepageBanner} HeroPoster={HeroPoster} />
@@ -449,7 +467,7 @@ const HeroSection = React.memo(({ HomepageBanner, HeroPoster }) => {
     height={1080}
     fetchpriority="high"
     decoding="async"
-    className="absolute inset-0 w-full h-full object-cover object-left-bottom pointer-events-none"
+    className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
   />
   {/* Content */}
   <div className="relative z-10 w-full flex flex-col nest-hub:flex-row items-center justify-center px-4 md:px-0 gap-6 md:gap-0">
