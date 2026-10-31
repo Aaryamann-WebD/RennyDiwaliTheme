@@ -39,7 +39,7 @@ import Coil from '../assets/hr-coil.webp';
 import rods from '../assets/product-5.webp';
 import popup from '../assets/careerPopup2.webp';
 import popup_Mobile from '../assets/careerPopup2-Mobile.webp';
-import greenPopup from '../assets/green-steel-popup-translucent.svg';
+import greenPopup from '../assets/green-steel-popup-gold-translucent.webp';
 import greenPopup_Mobile from '../assets/green-steel-popup-mobile.webp';
 
 import sustainability2 from '../assets/CBAM.webm';
@@ -112,17 +112,19 @@ const scaleFade = {
 
 const POPUPS = [
   {
+    id: 'green-steel',
+    desktop: greenPopup,
+    mobile: greenPopup_Mobile,
+    alt: 'Renny Strips Green Steel Certificate – 5 Star Rating',
+    gold:true,
+  },
+  {
     id: 'gptw',
     desktop: popup,
     mobile: popup_Mobile,
     alt: 'Renny Strips is Great Place To Work Certified',
   },
-  {
-    id: 'green-steel',
-    desktop: greenPopup,
-    mobile: greenPopup_Mobile,
-    alt: 'Renny Strips Green Steel Certificate – 5 Star Rating',
-  },
+  
 ];
 
 const Home = () => {
@@ -341,6 +343,8 @@ const Home = () => {
           <MdClose className="text-2xl" />
         </button>
 
+        
+
         <picture className="w-full flex justify-center">
           <source
             media="(max-width: 767px)"
@@ -366,6 +370,7 @@ const Home = () => {
             className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl aspect-[3/2]"
           />
         </picture>
+        
 
         {/* Page indicator, e.g. 1 / 2 */}
         <span className="absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-gray-500 bg-white/80 rounded-full px-3 py-1 z-20">
