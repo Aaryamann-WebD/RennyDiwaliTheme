@@ -110,14 +110,14 @@ const scaleFade = {
   visible: { opacity: 1, scale: 1 },
 };
 
-const POPUPS = [
-  {
-    id: 'green-steel',
-    desktop: greenPopup,
-    mobile: greenPopup_Mobile,
-    alt: 'Renny Strips Green Steel Certificate – 5 Star Rating',
-    gold:true,
-  },
+ const POPUPS = [
+//   {
+//     id: 'green-steel',
+//     desktop: greenPopup,
+//     mobile: greenPopup_Mobile,
+//     alt: 'Renny Strips Green Steel Certificate – 5 Star Rating',
+//     gold:true,
+//   },
   {
     id: 'gptw',
     desktop: popup,
