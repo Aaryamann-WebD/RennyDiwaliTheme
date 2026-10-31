@@ -254,7 +254,7 @@ const App = () => {
             <Route path="/thank-you" element={<Thankyou />} />
             <Route path="/:slug/thank-you" element={<Thankyou />} />
             <Route path="/catelog-download" element={<CatelogDownload/> } />
-            <Route path="/scaffolding-brochure" element={<ScaffoldingBrochure />} />
+            {/* <Route path="/scaffolding-brochure" element={<ScaffoldingBrochure />} /> */}
           </Routes>
           <Parallax />
           <Footer />
