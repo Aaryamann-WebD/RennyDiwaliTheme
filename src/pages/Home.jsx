@@ -43,7 +43,7 @@ import rods from '../assets/product-5.webp';
 import popup from '../assets/careerPopup2.webp';
 import popup_Mobile from '../assets/careerPopup2-Mobile.webp';
 import greenPopup from '../assets/green_steel_silver_pu.webp';
-import greenPopup_Mobile from '../assets/green-steel-popup-mobile (1).webp';
+import greenPopup_Mobile from '../assets/green-steel-popup-mobile (2).webp';
 
 import sustainability2 from '../assets/CBAM.webm';
 
