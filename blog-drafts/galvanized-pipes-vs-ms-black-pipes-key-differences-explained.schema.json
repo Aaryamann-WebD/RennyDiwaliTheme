@@ -1,0 +1,144 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://rennystrips.com/#organization",
+      "name": "Renny Strips Limited",
+      "url": "https://rennystrips.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://rennystrips.com/images/renny-strips-logo.png"
+      }
+    },
+    {
+      "@type": "Article",
+      "@id": "https://rennystrips.com/blog/galvanized-pipes-vs-ms-black-pipes-key-differences-explained#article",
+      "headline": "Galvanized Pipes vs MS Black Pipes: Key Differences Explained",
+      "description": "Galvanized pipes or MS Black Pipes? Compare zinc coating, corrosion resistance, durability, uses, IS 1239 specs and cost to pick the right pipe.",
+      "author": {
+        "@type": "Organization",
+        "@id": "https://rennystrips.com/#organization"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://rennystrips.com/#organization"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://rennystrips.com/blog/galvanized-pipes-vs-ms-black-pipes-key-differences-explained"
+      },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://rennystrips.com/blog/galvanized-pipes-vs-ms-black-pipes-key-differences-explained#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://rennystrips.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://rennystrips.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Galvanized Pipes vs MS Black Pipes: Key Differences Explained",
+          "item": "https://rennystrips.com/blog/galvanized-pipes-vs-ms-black-pipes-key-differences-explained"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://rennystrips.com/blog/galvanized-pipes-vs-ms-black-pipes-key-differences-explained#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What Is the Difference Between Galvanized Pipes and MS Black Pipes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Galvanized pipes carry a hot-dip zinc coating that resists rust, so they suit water and outdoor use. MS Black Pipes are uncoated mild steel, so they suit gas, steam and welded structures, and cost less upfront."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is GI Pipe the Same as ERW Pipe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not exactly. ERW is the manufacturing method; GI is the zinc finish. A GI pipe is usually an ERW pipe that was hot-dip galvanized after welding."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Galvanized Pipes Be Used for Gas Lines?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not recommended. Zinc can flake from the inner wall and block regulators and burner orifices. MS Black Pipes are the standard for natural gas and LPG."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Black Steel Pipe Be Used for Drinking Water?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not uncoated. Bare mill-scale steel rusts in water, which hurts flow and water quality. Use galvanized pipes, or suitably protected pipe, for potable supply."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How Long Do Galvanized Pipes Last?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typically 20 to 50 years in outdoor and water-supply use. Life depends on coating thickness, water chemistry, soil conditions and installation quality."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What Is the Minimum Zinc Coating on GI Pipes in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "IS 4736 sets a minimum of 360 g/m² for hot-dip galvanized mild steel tubes, measured across inner and outer surfaces. Renny's galvanized pipes carry 385 g/m²."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Galvanized Pipes Be Welded?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, but heating zinc releases zinc oxide fumes. Use extraction and protective equipment, then touch up the weld zone with zinc-rich paint."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How Much More Do Galvanized Pipes Cost Than MS Black Pipes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typically 15 to 25% more upfront. Over about 20 years, galvanized pipes often cost less in humid, coastal or buried service because they avoid repainting and early replacement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which Is Stronger, MS Black Pipe or Galvanized Pipe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Both are equally strong, because both start as the same mild steel pipe. Zinc adds corrosion protection, not mechanical strength."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How Do I Tell a Galvanized Pipe From an MS Black Pipe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Galvanized pipe has a silvery-grey zinc surface; MS Black Pipe is dark and matte. For proof, check the coating mass on the mill test certificate."
+          }
+        }
+      ]
+    }
+  ]
+}

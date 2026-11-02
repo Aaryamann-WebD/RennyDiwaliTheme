@@ -1,0 +1,24 @@
+/* C:\Users\HP\Desktop\RennyStrips2\Renny-frontend\src\pages\Home.css */
+
+#MSBillets_productBG{
+    position:absolute;
+    z-index:17;
+    top: 31%;
+    bottom: 0;
+}
+@media (max-width: 767px) {
+  #MSBillets_productBG {
+    height: 9rem;
+    object-fit: cover;
+    object-position: bottom;
+    top:77%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1376px) {
+  #MSBillets_productBG {
+    height: 12rem;
+    object-fit: cover;
+    object-position: bottom;
+    top: 86%;
+  }
+}
