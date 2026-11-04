@@ -75,6 +75,7 @@ import NewSections from "../components/NewSections"
 // import MapPage from './MapPage';
 import { buildApiUrl } from '../lib/api';
 // import ProductCarousel from '../components/ProductCarousel';
+import EventCard from '../components/EventCard';
 
 const MapPage = lazy(() => import('./MapPage'));
 const SustainabilitySlider = lazy(
@@ -94,6 +95,9 @@ const ProductCarousel = lazy(() => import('../components/ProductCarousel'));
 //     },
 //   ];
 
+// Events
+
+// const [events, setEvents] = useState([]);
 
 
 const staggerContainer = {
@@ -146,14 +150,19 @@ const Home = () => {
   const [newsData, setNewsData] = useState([]);
   const [activeNews, setActiveNews] = useState(null);
   const [blogs, setBlogs] = useState([]);
+   const [events, setEvents] = useState([]);
   const [contentError, setContentError] = useState('');
 
-  const fetchHomeData = useCallback(async () => {
-    try {
-      const [newsRes, blogsRes] = await Promise.all([
-        axios.get(buildApiUrl('/api/news')),
-        axios.get(buildApiUrl('/api/blogs')),
-      ]);
+const fetchHomeData=useCallback(async ()=>{
+  try{
+const [newsRes, blogsRes, eventsRes] = await Promise.all([
+  axios.get(buildApiUrl('/api/news')),
+  axios.get(buildApiUrl('/api/blogs')),
+  axios.get(buildApiUrl('/api/events')).catch((err) => {
+    console.error('Error fetching events:', err);
+    return null;
+  }),
+]);
       // setShowPopup(true); // Show popup after fetching data (Commented out to decouple from API latency)
 
       const getLatestDate = (item) =>
@@ -188,6 +197,34 @@ const Home = () => {
         setBlogs(latestBlogs);
       } else {
         setBlogs([]);
+      }
+        const eventsArray = eventsRes?.data?.data;
+
+      if (Array.isArray(eventsArray) && eventsArray.length > 0) {
+        const toTime = (e) => {
+          const t = new Date(e.date).getTime();
+          if (!Number.isNaN(t)) return t;
+          const m = String(e.date || '').match(
+            /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/
+          );
+          return m ? Date.UTC(Number(m[3]), Number(m[2]) - 1, Number(m[1])) : 0;
+        };
+
+        const latestEvents = eventsArray
+          .map((item) => ({
+            id: item._id,
+            title: item.title,
+            date: item.date,
+            video: item.videoUrl,
+            desc: item.description,
+            order: item.order,
+          }))
+          .sort((a, b) => toTime(b) - toTime(a))
+          .slice(0, 3);
+
+        setEvents(latestEvents);
+      } else {
+        setEvents([]);
       }
     } catch (error) {
       console.error('Error fetching homepage content:', error);
@@ -425,6 +462,8 @@ const Home = () => {
 
         {/* 8. Blog Section - BACKEND INTEGRATED */}
         <BlogSection blogs={blogs} formatDate={formatDate} />
+        {/* EVENT SECTION */}
+        <EventsSection events={events} />
       </div>
     </>
   );
@@ -727,7 +766,7 @@ const AboutSection = React.memo(() => {
                 transition={{ duration: 0.6, ease: 'easeOut' }}
               >
                 Founded in 1996 by Mr. Dev Gupta and headquartered in
-                Ludhiana, Punjab, Mr. Binny Gupta joined the business in the early 2000s. As Chairman and Managing Director, his entrepreneurial vision has driven Renny Strips Ltd.’s growth into India’s leading integrated structural steel companies With three induction
+                Ludhiana, Punjab, Mr. Binny Gupta joined the business in the early 2000s. As Chairman and Managing Director, his entrepreneurial vision has driven Renny Strips Ltd.’s growth into a gloablly recognised integrated structural steel companies With three induction
                 furnaces and a melting capacity of{' '}
                 <span className="font-bold">199,200 TPA</span>, we leverage
                 advanced technologies such as CNC machining and robotic welding
@@ -1626,5 +1665,70 @@ const BlogSection = React.memo(({ blogs, formatDate }) => {
     </>
   );
 });
+// Events Section HTML
+const EventsSection = React.memo(({ events }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '200px 0px',
+  });
+
+  if (events.length === 0) return null;
+
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden bg-white font-helvetica px-4 sm:px-6 py-14 md:py-20 panel"
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.h2
+          className="text-3xl text-blue sm:text-4xl md:text-[48px] font-bold w-full text-center"
+          initial={{ y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+        >
+          Events
+          <HeadingUnderline className="w-28 sm:w-40 md:w-52 mb-10" />
+        </motion.h2>
+
+        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10 text-sm sm:text-base">
+          
+        </p>
+
+        {inView ? (
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+          >
+            {events.map((event) => (
+              <motion.div 
+              key={event.id} 
+              variants={fadeUp}
+              className="h-full [&>*]:h-full"
+              >
+                <EventCard event={event} />
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="w-full h-64 bg-gray-50/30 animate-pulse rounded-2xl" />
+        )}
+
+        <div className="flex justify-center mt-10">
+          <Link
+            to="/events"
+            className="inline-flex items-center gap-2 bg-blue text-white px-7 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:-translate-y-1 text-sm sm:text-base"
+          >
+            View All Events <span>→</span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+});
+
 
 export default Home;
