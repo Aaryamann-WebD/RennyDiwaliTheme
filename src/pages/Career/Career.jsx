@@ -104,7 +104,16 @@ const badgeImages = [
 
 const isPrerender =
   typeof navigator !== 'undefined' && navigator.userAgent === 'ReactSnap';
-
+const stripHtml = (html = '') =>
+  html
+    .replace(/<\/(p|h[1-6]|li|div)>/gi, ' ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&reg;/g, '®')
+    .replace(/&#8377;/g, '₹')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 const Career = () => {
   // ========== Hero Content ==========
   const { heroSrc, heroHeading } = usePageHero('careers', 'Careers', banner);
@@ -188,7 +197,7 @@ const scrollToCulture = () =>
       (!q ||
         job.title?.toLowerCase().includes(q) ||
         job.department?.toLowerCase().includes(q) ||
-        job.description?.toLowerCase().includes(q))
+        stripHtml(job.description || '').toLowerCase().includes(q))
     );
   });
   return (
@@ -515,10 +524,10 @@ Renny Strips Ltd. is growing. Your career can rise with us.</p>
 
                 {/* Description and details link */}
                 {job.description && (
-                  <p className="mt-4 text-sm text-gray-700 line-clamp-2">
-                    {job.description}
-                  </p>
-                )}
+  <p className="mt-4 text-sm text-gray-700 line-clamp-2">
+    {stripHtml(job.description)}
+  </p>
+)}
                 <button
                   onClick={() => navigate(`/careers/${job._id}`)}
                   className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-[#292c44] hover:underline"
