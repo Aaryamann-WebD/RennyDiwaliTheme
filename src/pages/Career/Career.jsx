@@ -4,10 +4,23 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MdSearch,
-  MdOutlineBusinessCenter,
-  MdFilterList,
-  MdLocationOn,
   MdClose,
+  MdKeyboardArrowDown,
+  MdArrowForward,
+  MdLocationOn,
+  MdOutlineBusinessCenter,
+  MdPeopleOutline,
+  MdCalculate,
+  MdBalance,
+  MdEngineering,
+  MdComputer,
+  MdFactory,
+  MdCampaign,
+  MdVerified,
+  MdGroups,
+  MdTrendingUp,
+  MdCardGiftcard,
+  MdWorkspacePremium,
 } from 'react-icons/md';
 import SEO from '../../components/SEO';
 
@@ -31,18 +44,57 @@ import amazingCulture from '../../assets/Amazing_Culture!_IN.webp';
 import wereCertified from "../../assets/We're_Certified!_IN.webp";
 
 // ========== Job Types ==========
-const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Remote', 'Trainee'];
+
 
 // ========== Departments ==========
 const departments = [
   'All',
   'Finance',
+  'Legal & Compliance',
   'Engineering',
   'IT & Software',
   'Operations',
   'Sales & Marketing',
   'Quality Control',
 ];
+
+const deptIcons = {
+  Finance: MdCalculate,
+  'Legal & Compliance': MdBalance,
+  Engineering: MdEngineering,
+  'IT & Software': MdComputer,
+  Operations: MdFactory,
+  'Sales & Marketing': MdCampaign,
+  'Quality Control': MdVerified,
+};
+
+const whyJoin = [
+  { icon: MdGroups, title: 'People-First Culture', text: 'A supportive and inclusive workplace' },
+  { icon: MdTrendingUp, title: 'Growth Opportunities', text: 'Continuous learning and career advancement' },
+  { icon: MdCardGiftcard, title: 'Competitive Benefits', text: 'Total rewards for your well-being' },
+  { icon: MdWorkspacePremium, title: 'A Great Place to Work®', text: 'Recognised for our positive work culture' },
+];
+
+const FilterSelect = ({ value, onChange, allLabel, options, ariaLabel }) => (
+  <div className="relative">
+    <select
+      value={value}
+      onChange={onChange}
+      aria-label={ariaLabel}
+      className="appearance-none w-full h-12 pl-4 pr-10 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-[#292c44] outline-none focus:border-[#292c44]"
+    >
+      <option value="All">{allLabel}</option>
+      {options
+        .filter((o) => o !== 'All')
+        .map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+    </select>
+    <MdKeyboardArrowDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xl text-[#292c44]" />
+  </div>
+);
 
 const badgeImages = [
   { src: makeUsGreat, alt: 'Our People make us Great' },
@@ -62,11 +114,17 @@ const Career = () => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [activeDepartment, setActiveDepartment] = useState('All');
+  const emptyFilters = { search: '', department: 'All', location: 'All', experience: 'All' };
+const [draft, setDraft] = useState(emptyFilters);
+const [filters, setFilters] = useState(emptyFilters);
 
-  const [activeType, setActiveType] = useState('Full-time');
+const handleSearch = (e) => {
+  e.preventDefault();
+  setFilters(draft);
+};
 
-  const [search, setSearch] = useState('');
+const scrollToCulture = () =>
+  document.getElementById('culture')?.scrollIntoView({ behavior: 'smooth' });
   // Popup state (true so it appears automatically when user visits the page, false during prerendering)
   const [showPopup, setShowPopup] = useState(!isPrerender);
 
@@ -119,11 +177,18 @@ const Career = () => {
   };
 
   // ========== Filtered Jobs ==========
+  const locations = [...new Set(jobsData.map((j) => j.location).filter(Boolean))];
+  const experiences = [...new Set(jobsData.map((j) => j.experience).filter(Boolean))];
   const filteredJobs = jobsData.filter((job) => {
+    const q = filters.search.toLowerCase();
     return (
-      (activeDepartment === 'All' || job.department === activeDepartment) &&
-      job.jobType === activeType &&
-      job.title.toLowerCase().includes(search.toLowerCase())
+      (filters.department === 'All' || job.department === filters.department) &&
+      (filters.location === 'All' || job.location === filters.location) &&
+      (filters.experience === 'All' || job.experience === filters.experience) &&
+      (!q ||
+        job.title?.toLowerCase().includes(q) ||
+        job.department?.toLowerCase().includes(q) ||
+        job.description?.toLowerCase().includes(q))
     );
   });
   return (
@@ -213,7 +278,7 @@ const Career = () => {
         </section>
 
         {/* ========== WHERE TALENT MEETS OPPORTUNITY SECTION ========== */}
-        <section className="bg-white py-16 md:py-24 border-b border-gray-100">
+        <section id="culture" className="bg-white py-16 md:py-24 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6">
             {/* Centered Heading */}
             <motion.div
@@ -311,124 +376,194 @@ Renny Strips Ltd. is growing. Your career can rise with us.</p>
         </section>
 
         {/* CONTENT */}
-        <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12">
-          {/* SIDEBAR */}
-          <motion.aside
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-white rounded-3xl p-6 border border-gray-100 h-fit lg:sticky lg:top-24"
-          >
-            <div className="mb-6">
-              <div className="flex items-center gap-2 text-xs font-black uppercase text-gray-400 mb-2">
-                <MdSearch /> Search
-              </div>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search jobs"
-                className="w-full px-4 py-3 bg-gray-50 rounded-xl font-bold text-sm outline-none"
-              />
-            </div>
+        {/* ========== CURRENT JOB OPENINGS ========== */}
+<div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">
+  {/* LEFT: openings */}
+  <section>
+    <h2 className="text-3xl md:text-4xl font-extrabold text-[#292c44]">
+      Current <span className="text-red-600">Job Openings</span>
+    </h2>
+    <p className="mt-1 text-gray-600">
+      Find your perfect role and be a part of our growing team.
+    </p>
 
-            <div className="mb-8">
-              <div className="flex items-center gap-2 text-xs font-black uppercase text-gray-400 mb-3">
-                <MdFilterList /> Department
-              </div>
-              <div className="flex flex-col gap-2">
-                {departments.map((dept) => (
-                  <button
-                    key={dept}
-                    onClick={() => setActiveDepartment(dept)}
-                    className={`text-left px-4 py-2 rounded-lg font-bold text-sm transition ${
-                      activeDepartment === dept
-                        ? 'bg-[#292c44] text-white'
-                        : 'text-gray-500 hover:bg-gray-100'
-                    }`}
-                  >
-                    {dept}
-                  </button>
-                ))}
-              </div>
-            </div>
+    {/* Search bar */}
+    <form
+      onSubmit={handleSearch}
+      className="mt-6 grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto_auto] gap-3"
+    >
+      <div className="relative">
+        <MdSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-xl text-[#292c44]" />
+        <input
+          type="text"
+          value={draft.search}
+          onChange={(e) => setDraft({ ...draft, search: e.target.value })}
+          placeholder="Search by job title or keyword..."
+          className="w-full h-12 pl-11 pr-4 rounded-xl border border-gray-200 bg-white text-sm outline-none focus:border-[#292c44]"
+        />
+      </div>
+      <FilterSelect
+        ariaLabel="Department"
+        allLabel="All Departments"
+        value={draft.department}
+        options={departments}
+        onChange={(e) => setDraft({ ...draft, department: e.target.value })}
+      />
+      <FilterSelect
+        ariaLabel="Location"
+        allLabel="All Locations"
+        value={draft.location}
+        options={locations}
+        onChange={(e) => setDraft({ ...draft, location: e.target.value })}
+      />
+      <FilterSelect
+        ariaLabel="Experience level"
+        allLabel="All Experience Levels"
+        value={draft.experience}
+        options={experiences}
+        onChange={(e) => setDraft({ ...draft, experience: e.target.value })}
+      />
+      <button
+        type="submit"
+        className="h-12 px-6 rounded-xl bg-[#292c44] text-white text-sm font-bold hover:opacity-90 transition"
+      >
+        Search Jobs
+      </button>
+    </form>
 
-            <div>
-              <div className="flex items-center gap-2 text-xs font-black uppercase text-gray-400 mb-3">
-                <MdOutlineBusinessCenter /> Job Type
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {jobTypes.map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setActiveType(type)}
-                    className={`px-4 py-2 rounded-lg text-[11px] font-black uppercase transition ${
-                      activeType === type
-                        ? 'bg-[#292c44] text-white'
-                        : 'text-gray-500 hover:bg-gray-100'
-                    }`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.aside>
-
-          {/* JOB LIST */}
-          <section>
-            {errorMessage && (
-              <div className="mb-6 rounded-2xl bg-white px-5 py-4 text-sm font-medium text-[#292c44] shadow-sm">
-                {errorMessage}
-              </div>
-            )}
-            {loading ? (
-              <div className="py-24 text-center text-gray-300 font-bold">
-                Loading opportunities…
-              </div>
-            ) : filteredJobs.length === 0 ? (
-              <div className="py-24 text-center text-gray-400 font-bold">
-                No positions found
-              </div>
-            ) : (
-              <AnimatePresence>
-                <div className="flex flex-col gap-6">
-                  {filteredJobs.map((job) => (
-                    <motion.div
-                      key={job._id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      whileHover={{ y: -4 }}
-                      className="bg-white rounded-3xl p-8 border border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-sm hover:shadow-xl transition"
-                    >
-                      <div>
-                        <h2 className="text-2xl font-bold text-[#292c44]">
-                          {job.title}
-                        </h2>
-                        <p className="text-sm font-bold text-gray-400 uppercase mt-1">
-                          {job.department} • {job.jobType} • {job.location}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1 text-xs font-black uppercase text-green-600 bg-green-50 px-3 py-1 rounded-md">
-                          <MdLocationOn /> Open
-                        </span>
-                        <button
-                          onClick={() => navigate(`/careers/${job._id}`)}
-                          //add hover and tap effects to button
-                          className="px-10 py-3 bg-[#292c44] text-white rounded-xl font-bold transition shadow-lg shadow-[#292c44]/20"
-                        >
-                          Apply
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </AnimatePresence>
-            )}
-          </section>
+    {/* Job list */}
+    <div className="mt-6">
+      {errorMessage && (
+        <div className="mb-6 rounded-2xl bg-white px-5 py-4 text-sm font-medium text-[#292c44] shadow-sm">
+          {errorMessage}
         </div>
+      )}
+
+      {loading ? (
+        <div className="py-24 text-center text-gray-300 font-bold">
+          Loading opportunities…
+        </div>
+      ) : filteredJobs.length === 0 ? (
+        <div className="py-24 text-center text-gray-400 font-bold">
+          No positions found
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {filteredJobs.map((job) => {
+            const DeptIcon = deptIcons[job.department] || MdOutlineBusinessCenter;
+            const vacancies = Number(job.vacancies);
+            return (
+              <motion.div
+                key={job._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -2 }}
+                className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-lg transition"
+              >
+                <div className="flex flex-col md:flex-row md:items-center gap-5">
+                  {/* Icon */}
+                  <div className="shrink-0 w-16 h-16 rounded-full bg-blue-100 text-[#292c44] flex items-center justify-center">
+                    <DeptIcon className="text-3xl" />
+                  </div>
+
+                  {/* Title and department tag */}
+                  <div className="md:w-[260px]">
+                    <h3 className="text-lg font-bold text-[#292c44] leading-snug">
+                      {job.title}
+                    </h3>
+                    {job.department && (
+                      <span className="inline-block mt-2 px-2.5 py-0.5 rounded-md bg-blue-50 text-xs font-medium text-[#292c44]">
+                        {job.department}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Meta columns */}
+                  <div className="flex flex-wrap md:flex-nowrap items-stretch gap-y-3 md:flex-1">
+                    {job.location && (
+                      <div className="flex items-center gap-2 pr-5 md:px-5 md:border-l border-gray-300 text-sm font-semibold text-[#292c44]">
+                        <MdLocationOn className="text-xl shrink-0" />
+                        <span>{job.location}</span>
+                      </div>
+                    )}
+                    {job.experience && (
+                      <div className="flex items-center gap-2 pr-5 md:px-5 md:border-l border-gray-300 text-sm font-semibold text-[#292c44]">
+                        <MdOutlineBusinessCenter className="text-xl shrink-0" />
+                        <span>{job.experience}</span>
+                      </div>
+                    )}
+                    {vacancies > 0 && (
+                      <div className="flex items-center gap-2 pr-5 md:px-5 md:border-l border-gray-300 text-sm font-semibold text-[#292c44]">
+                        <MdPeopleOutline className="text-xl shrink-0" />
+                        <span>
+                          {vacancies} {vacancies === 1 ? 'Vacancy' : 'Vacancies'}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Apply */}
+                  <div className="md:pl-5 md:border-l border-gray-300">
+                    <button
+                      onClick={() => navigate(`/careers/${job._id}`)}
+                      className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition"
+                    >
+                      Apply Now <MdArrowForward />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Description and details link */}
+                {job.description && (
+                  <p className="mt-4 text-sm text-gray-700 line-clamp-2">
+                    {job.description}
+                  </p>
+                )}
+                <button
+                  onClick={() => navigate(`/careers/${job._id}`)}
+                  className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-[#292c44] hover:underline"
+                >
+                  View Details <MdArrowForward />
+                </button>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {/* RIGHT: Why Join */}
+  <motion.aside
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    className="h-fit lg:sticky lg:top-24 rounded-3xl bg-gradient-to-b from-blue-50 to-blue-100/60 border border-blue-100 p-6"
+  >
+    <h3 className="text-xl font-extrabold text-[#292c44]">Why Join Renny Strips?</h3>
+    <div className="mt-2 mb-6 h-0.5 w-16 bg-red-600" />
+
+    <ul className="flex flex-col gap-5">
+      {whyJoin.map(({ icon: Icon, title, text }) => (
+        <li key={title} className="flex items-start gap-4">
+          <div className="shrink-0 w-12 h-12 rounded-full bg-blue-100 text-[#292c44] flex items-center justify-center">
+            <Icon className="text-2xl" />
+          </div>
+          <div>
+            <p className="font-bold text-[#292c44] text-sm">{title}</p>
+            <p className="text-xs text-gray-600">{text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <button
+      onClick={scrollToCulture}
+      className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#292c44] hover:underline"
+    >
+      Learn More <MdArrowForward />
+    </button>
+  </motion.aside>
+</div>
 
         {/* Success Stories */}
         {/* <section className="bg-[#eff6ff] py-10">
