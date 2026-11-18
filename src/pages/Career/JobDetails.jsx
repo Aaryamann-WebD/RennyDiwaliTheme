@@ -15,6 +15,14 @@ import { buildApiUrl } from "../../lib/api";
 // ========== Assets ==========
 import banner from "../../assets/careerBanner.webp";
 
+const htmlStyles =
+  '[&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-3 ' +
+  '[&_li]:mb-1 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:mt-4 [&_h2]:mb-2 ' +
+  '[&_h3]:font-bold [&_h3]:mt-4 [&_h3]:mb-2 [&_a]:text-blue-700 [&_a]:underline ' +
+  '[&_strong]:font-bold';
+
+const looksLikeHtml = (text = '') => /<\/?[a-z][\s\S]*>/i.test(text);
+
 const JobDetails = () => {
   // ========== Route Params ==========
   const { jobId } = useParams();
@@ -177,6 +185,24 @@ const JobDetails = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-12 text-left w-full"
           >
+            {/* Detailed Job Description */}
+            <div className="mb-12">
+              <h3 className="text-lg font-bold mb-4 text-[#292c44]">
+                Position Overview
+              </h3>
+              {looksLikeHtml(job.description) ? (
+  <div
+    className={`text-gray-600 leading-relaxed text-sm md:text-base ${htmlStyles}`}
+    dangerouslySetInnerHTML={{ __html: job.description }}
+  />
+) : (
+  <p className="text-gray-600 leading-relaxed whitespace-pre-wrap text-sm md:text-base">
+    {job.description}
+  </p>
+)}
+            </div>
+            
+            
             {/* About Company */}
             <div className="mb-10">
               <h2 className="flex items-center gap-2 text-lg font-bold mb-4 text-[#292c44]">
@@ -188,15 +214,7 @@ const JobDetails = () => {
               </p>
             </div>
 
-            {/* Detailed Job Description */}
-            <div className="mb-12">
-              <h3 className="text-lg font-bold mb-4 text-[#292c44]">
-                Position Overview
-              </h3>
-              <p className="text-gray-600 leading-relaxed whitespace-pre-wrap text-sm md:text-base">
-                {job.description}
-              </p>
-            </div>
+            
 
             {/* Bottom Apply Button */}
             <div className="flex flex-col items-center pt-8 border-t border-gray-50">
