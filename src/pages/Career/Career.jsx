@@ -381,7 +381,7 @@ Renny Strips Ltd. is growing. Your career can rise with us.</p>
   {/* LEFT: openings */}
   <section>
     <h2 className="text-3xl md:text-4xl font-extrabold text-[#292c44]">
-      Current <span className="text-red-600">Job Openings</span>
+      Current <span className="text-#292c44">Job Openings</span>
     </h2>
     <p className="mt-1 text-gray-600">
       Find your perfect role and be a part of our growing team.
@@ -506,7 +506,7 @@ Renny Strips Ltd. is growing. Your career can rise with us.</p>
                   <div className="md:pl-5 md:border-l border-gray-300">
                     <button
                       onClick={() => navigate(`/careers/${job._id}`)}
-                      className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition"
+                      className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#292c44] text-white text-sm font-bold hover:bg-[#292c44] transition"
                     >
                       Apply Now <MdArrowForward />
                     </button>
